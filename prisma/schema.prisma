@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  ideaText    String   @db.Text
+  productType String?
+  targetUsers Json?
+  constraints Json?
+  summary     String?  @db.Text
+  currentStep String   @default("idea")
+  status      String   @default("active")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stepStatuses              StepStatus[]
+  clarificationQuestions    ClarificationQuestion[]
+  requirementBreakdownItems RequirementBreakdownItem[]
+  userStories               UserStory[]
+  wireframePages            WireframePage[]
+  prdDocument               PRDDocument?
+  deliveryItems             DeliveryItem[]
+  reviewReports             ReviewReport[]
+  generationLogs            GenerationLog[]
+
+  @@index([status])
+  @@index([updatedAt])
+}
+
+model StepStatus {
+  id        String @id @default(cuid())
+  projectId String
+  stepKey   String
+  status    String @default("not_started")
+
+  confirmedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, stepKey])
+  @@index([projectId])
+}
+
+model ClarificationQuestion {
+  id           String @id @default(cuid())
+  projectId    String
+  questionText String @db.Text
+  questionType String
+  answerType   String @default("text")
+
+  aiSuggestion String? @db.Text
+  userAnswer   String? @db.Text
+  answerStatus String  @default("unanswered")
+
+  isRequired  Boolean @default(false)
+  impactArea  Json?
+  status      String  @default("draft")
+  version     Int     @default(1)
+  generatedBy String  @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model RequirementBreakdownItem {
+  id        String @id @default(cuid())
+  projectId String
+
+  userScenario String  @db.Text
+  userProblem  String  @db.Text
+  userValue    String? @db.Text
+
+  featureModule String
+  subFeature    String
+  priority      String  @default("P1")
+  isMvp         Boolean @default(false)
+  mvpReason     String? @db.Text
+  outOfScope    Boolean @default(false)
+
+  assumptions                 Json?
+  risks                       Json?
+  relatedClarificationIds     Json?
+  status                      String @default("draft")
+  version                     Int    @default(1)
+  generatedBy                 String @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([priority])
+  @@index([status])
+}
+
+model UserStory {
+  id        String @id @default(cuid())
+  projectId String
+
+  role      String
+  scenario  String @db.Text
+  goal      String @db.Text
+  benefit   String @db.Text
+  storyText String @db.Text
+
+  mainFlow              Json
+  exceptionScenarios    Json?
+  acceptanceCriteria    Json
+  relatedRequirementIds Json
+
+  priority    String  @default("P1")
+  isMvp       Boolean @default(false)
+  status      String  @default("draft")
+  version     Int     @default(1)
+  generatedBy String  @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([priority])
+  @@index([status])
+}
+
+model WireframePage {
+  id        String @id @default(cuid())
+  projectId String
+
+  pageName String
+  pageType String?
+  pageGoal String @db.Text
+
+  coreModules Json
+  keyActions  Json
+  entryPoints Json?
+  nextPages   Json?
+
+  relatedUserStoryIds   Json
+  relatedRequirementIds Json
+  states                Json
+  wireframeText         String? @db.Text
+
+  status      String @default("draft")
+  version     Int    @default(1)
+  generatedBy String @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model PRDDocument {
+  id        String @id @default(cuid())
+  projectId String @unique
+
+  title           String
+  docVersion      String @default("v0.1")
+  status          String @default("draft")
+  contentMarkdown String @db.Text
+  sections        Json
+  sourceArtifactIds Json
+  generatedBy     String @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model DeliveryItem {
+  id        String @id @default(cuid())
+  projectId String
+
+  moduleName      String
+  requirementName String
+  description     String @db.Text
+
+  relatedPageIds      Json?
+  relatedUserStoryIds Json?
+  acceptanceCriteria  Json
+  priority            String @default("P1")
+  versionPlan         String @default("MVP")
+  dependencies        Json?
+  collaborators       Json?
+  deliveryStatus      String @default("todo")
+  generatedBy         String @default("ai")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([priority])
+  @@index([deliveryStatus])
+}
+
+model ReviewReport {
+  id        String @id @default(cuid())
+  projectId String
+
+  overallScore        Int
+  conclusion          String @db.Text
+  readinessStatus     String
+  dimensionScores     Json
+  issues              Json
+  risks               Json?
+  suggestions         Json
+  nextActions         Json
+  reviewedArtifactIds Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([readinessStatus])
+  @@index([createdAt])
+}
+
+model GenerationLog {
+  id        String @id @default(cuid())
+  projectId String
+
+  stepKey        String
+  artifactType  String
+  mode          String
+  inputSnapshot Json?
+  outputSnapshot Json?
+  modelName     String?
+  status        String  @default("running")
+  errorMessage  String? @db.Text
+
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([stepKey])
+  @@index([status])
+  @@index([createdAt])
+}
