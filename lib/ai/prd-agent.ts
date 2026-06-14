@@ -42,6 +42,7 @@ type GeneratePrdInput = {
     keyActions: unknown;
     nextPages: unknown;
   }>;
+  knowledgeContext?: string;
 };
 
 type AiPrdOutput = {
@@ -89,9 +90,13 @@ function buildPrdPrompt(input: GeneratePrdInput) {
     "3. sections \u751f\u6210 8 \u4e2a\u7ae0\u8282\uff1a\u4ea7\u54c1\u80cc\u666f\u3001\u76ee\u6807\u7528\u6237\u3001\u6838\u5fc3\u95ee\u9898\u3001MVP \u8303\u56f4\u3001\u6838\u5fc3\u6d41\u7a0b\u3001\u529f\u80fd\u9700\u6c42\u3001\u9a8c\u6536\u6807\u51c6\u3001\u98ce\u9669\u4e0e\u5f85\u786e\u8ba4\u3002",
     "4. \u6bcf\u4e2a section.content \u7528\u6362\u884c\u5206\u9694\u6bb5\u843d\uff0c\u53ef\u7528 '- ' \u8868\u793a\u5217\u8868\uff0c\u53ef\u7528 '### ' \u8868\u793a\u5c0f\u6807\u9898\u3002",
     "5. \u8f93\u51fa JSON \u683c\u5f0f\uff1a{\"sections\":[{\"sectionKey\":\"background\",\"title\":\"...\",\"content\":\"...\"}]}",
+    "6. 如果提供了知识库资料，请遵守其中的业务规则，并在相关内容后使用“来源：文件名”标注依据；不要把推断写成已验证事实。",
     "",
     "\u9879\u76ee\u4fe1\u606f\uff1a",
-    JSON.stringify(toPromptContext(input), null, 2)
+    JSON.stringify(toPromptContext(input), null, 2),
+    "",
+    "项目知识库检索结果：",
+    input.knowledgeContext || "未提供知识库资料。"
   ].join("\n");
 }
 

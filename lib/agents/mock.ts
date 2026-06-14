@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { generatePrdWithLocalAi } from "@/lib/ai/prd-agent";
 import { generateRequirementsWithLocalAi } from "@/lib/ai/requirement-agent";
 import { generateUserStoriesWithLocalAi } from "@/lib/ai/user-story-agent";
+import { formatRagContext, retrieveKnowledge } from "@/lib/rag/service";
 
 export async function generateClarificationQuestions(projectId: string) {
   const project = await prisma.project.findUniqueOrThrow({ where: { id: projectId } });
@@ -111,6 +112,17 @@ export async function generateRequirementBreakdown(projectId: string) {
   const mvpScope =
     project.clarificationQuestions.find((item) => item.questionType === "mvp_scope")?.userAnswer ||
     "\u5148\u5b9e\u73b0\u6700\u80fd\u9a8c\u8bc1\u6838\u5fc3\u4ef7\u503c\u7684\u4e3b\u6d41\u7a0b";
+  const ragSources = await retrieveKnowledge(
+    projectId,
+    [
+      project.name,
+      project.ideaText,
+      coreProblem,
+      targetUser,
+      mvpScope,
+      "业务规则 用户需求 MVP 优先级 风险"
+    ].join(" ")
+  );
 
   const mockItems = [
     {
@@ -172,7 +184,8 @@ export async function generateRequirementBreakdown(projectId: string) {
     productType: project.productType,
     targetUsers: project.targetUsers,
     constraints: project.constraints,
-    clarificationQuestions: project.clarificationQuestions
+    clarificationQuestions: project.clarificationQuestions,
+    knowledgeContext: formatRagContext(ragSources)
   });
   const items = aiItems ?? mockItems;
   const generationMode = aiItems ? "ollama" : "mock";
@@ -478,6 +491,15 @@ export async function generatePrdDocument(projectId: string) {
     project.clarificationQuestions.find((item) => item.questionType === "problem")?.userAnswer ||
     mvpItems[0]?.userProblem ||
     "\u76ee\u524d\u7528\u6237\u6709\u4ea7\u54c1\u60f3\u6cd5\uff0c\u4f46\u7f3a\u5c11\u7ed3\u6784\u5316\u65b9\u6cd5\u5c06\u5176\u8f6c\u5316\u4e3a\u53ef\u8bc4\u5ba1\u3001\u53ef\u534f\u4f5c\u7684\u9700\u6c42\u6587\u6863\u3002";
+  const ragSources = await retrieveKnowledge(
+    projectId,
+    [
+      project.name,
+      project.ideaText,
+      mainProblem,
+      "产品规则 用户场景 功能需求 验收标准 风险"
+    ].join(" ")
+  );
   const coreFlow =
     project.clarificationQuestions.find((item) => item.questionType === "user_scenario")?.userAnswer ||
     "\u7528\u6237\u5148\u8f93\u5165\u4ea7\u54c1\u60f3\u6cd5\uff0c\u518d\u9010\u6b65\u5b8c\u6210\u9700\u6c42\u6f84\u6e05\u3001\u9700\u6c42\u62c6\u89e3\u3001\u7528\u6237\u6545\u4e8b\u3001\u4f4e\u4fdd\u771f\u539f\u578b\u548c PRD \u521d\u7a3f\u3002";
@@ -608,6 +630,18 @@ export async function generatePrdDocument(projectId: string) {
       content: answeredQuestions.length
         ? answeredQuestions.map((question) => `- ${question.questionText}\n  - \u5f53\u524d\u56de\u7b54\uff1a${question.userAnswer}`).join("\n")
         : "- \u9700\u8865\u5145\u9700\u6c42\u6f84\u6e05\u56de\u7b54"
+    },
+    {
+      sectionKey: "knowledge_sources",
+      title: "知识库依据",
+      content: ragSources.length
+        ? ragSources
+            .map(
+              (source, index) =>
+                `- [资料 ${index + 1}] ${source.fileName}（相关度 ${(source.score * 100).toFixed(1)}%）：${source.content.slice(0, 180)}`
+            )
+            .join("\n")
+        : "- 当前项目未上传知识库资料，本版内容主要依据用户输入和 AI 推断生成。"
     }
   ];
 
@@ -629,7 +663,8 @@ export async function generatePrdDocument(projectId: string) {
     clarificationQuestions: project.clarificationQuestions,
     requirementBreakdownItems: project.requirementBreakdownItems,
     userStories: project.userStories,
-    wireframePages: project.wireframePages
+    wireframePages: project.wireframePages,
+    knowledgeContext: formatRagContext(ragSources)
   });
   const finalSections = aiPrd?.sections ?? sections;
   const finalContentMarkdown = aiPrd?.contentMarkdown ?? contentMarkdown;

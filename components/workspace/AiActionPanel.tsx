@@ -1,10 +1,12 @@
 import { WORKFLOW_STEPS, getStepLabel, type StepKey } from "@/lib/workflow/steps";
+import { KnowledgePanel } from "./KnowledgePanel";
 
 type AiActionPanelProps = {
   currentStep: StepKey;
+  projectId: string;
 };
 
-export function AiActionPanel({ currentStep }: AiActionPanelProps) {
+export function AiActionPanel({ currentStep, projectId }: AiActionPanelProps) {
   const step = WORKFLOW_STEPS.find((item) => item.key === currentStep);
 
   return (
@@ -44,6 +46,7 @@ export function AiActionPanel({ currentStep }: AiActionPanelProps) {
           {"\u5f53\u524d\u7248\u672c\u652f\u6301\u5de6\u4fa7\u9009\u62e9\u6b65\u9aa4\uff0c\u4e2d\u95f4\u5c55\u793a\u5bf9\u5e94\u6b65\u9aa4\u5185\u5bb9\u3002\u771f\u5b9e\u751f\u6210\u64cd\u4f5c\u653e\u5728\u4e2d\u95f4\u5185\u5bb9\u533a\uff0c\u65b9\u4fbf\u548c\u7ed3\u679c\u4e00\u8d77\u67e5\u770b\u3002"}
         </p>
       </div>
+      <KnowledgePanel projectId={projectId} />
     </aside>
   );
 }

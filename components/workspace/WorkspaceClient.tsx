@@ -162,7 +162,7 @@ export function WorkspaceClient({ project }: WorkspaceClientProps) {
           selectedStep={selectedStep}
           onSelectStep={setSelectedStep}
         />
-        <AiActionPanel currentStep={selectedStep} />
+        <AiActionPanel currentStep={selectedStep} projectId={project.id} />
       </div>
     </div>
   );

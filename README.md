@@ -15,6 +15,7 @@
 7. **研发协作**：整理前端、后端、测试及产品 / 运营协作事项。
 8. **评审准备**：汇总待确认问题、风险与评审材料。
 9. **Word 导出**：将项目成果导出为 Word 可打开的文档。
+10. **项目级 RAG 知识库**：上传 Markdown/TXT 资料，经过文本切片、Embedding 和 Top-4 语义检索后，为需求拆解与 PRD 提供有来源的业务上下文。
 
 ## 工作流
 
@@ -50,6 +51,7 @@ flowchart TB
 | 服务端 | Next.js Route Handlers、Zod |
 | 数据层 | Prisma、PostgreSQL |
 | AI | Ollama、Qwen2.5 3B、结构化 JSON 输出 |
+| RAG | Ollama Embedding、文本分块、余弦相似度、Top-K 检索 |
 | 文档 | Word 兼容格式导出 |
 
 ## Agent 设计
@@ -60,6 +62,12 @@ flowchart TB
 - 用户故事 Agent：根据用户角色和流程生成多条用户故事。
 - PRD Agent：聚合产品想法、澄清答案、需求和用户故事，生成完整 PRD。
 - 其他步骤：已具备独立生成接口与规则模板，可继续替换为模型 Agent。
+
+### RAG Lite
+
+项目知识库支持 `.md` 和 `.txt` 文件，也可以直接粘贴业务规则、用户访谈或历史需求。文档按约 700 字符切片并保留重叠上下文，优先使用 Ollama 的 `nomic-embed-text` 生成 Embedding；模型不可用时自动使用确定性本地向量降级。
+
+需求拆解和 PRD 生成前，会在当前项目范围内计算余弦相似度并选取 Top-4 文本块。检索结果以带文件名的上下文注入 Agent，PRD 同时生成“知识库依据”章节。当前实现将向量保存为 PostgreSQL JSON，适合小型作品集知识库；数据规模扩大后可迁移至 `pgvector`。
 
 模型不可用、超时或返回格式不正确时，系统会自动使用规则模板降级，保证演示流程不中断。生成日志会记录使用的是 Ollama 还是降级模式。
 
@@ -87,6 +95,7 @@ PowerShell 如果限制执行 `npm.ps1`，直接使用 `npm.cmd` 即可。
 DATABASE_URL="postgresql://postgres:你的密码@localhost:5432/productflow_ai?schema=public"
 OLLAMA_BASE_URL="http://127.0.0.1:11434"
 OLLAMA_MODEL="qwen2.5:3b"
+OLLAMA_EMBEDDING_MODEL="nomic-embed-text"
 ```
 
 `OPENAI_API_KEY` 是后续接入云端模型的预留字段，当前版本不会使用。
@@ -110,6 +119,7 @@ npm.cmd run prisma:deploy
 
 ```powershell
 ollama pull qwen2.5:3b
+ollama pull nomic-embed-text
 ollama serve
 ```
 
@@ -145,6 +155,7 @@ components/workspace/          三栏工作台与八个步骤组件
 lib/
   ai/                          Ollama 客户端与专项 Agent
   agents/                      规则模板和降级生成逻辑
+  rag/                         文本切片、Embedding 与语义检索
   projects/                    项目校验、服务与导出
   workflow/                    工作流步骤定义
 prisma/
@@ -162,6 +173,8 @@ prisma/
 - `PrdDocument`：PRD 章节和正文。
 - `CollaborationTask`：研发协作任务。
 - `GenerationLog`：模型、状态、耗时和降级模式记录。
+- `KnowledgeDocument`：项目级知识文档。
+- `KnowledgeChunk`：文档切片及其 Embedding 向量。
 
 ## 部署说明
 
@@ -190,6 +203,7 @@ npm.cmd run start
 - 当前优先支持桌面端工作台。
 - Word 导出为 Word 可打开的兼容文档，不是完整 OOXML 排版引擎。
 - Ollama Agent 已覆盖核心文档步骤，其他步骤仍以规则生成作为主要实现。
+- 当前 RAG 使用应用层余弦相似度检索，适合小型知识库，不面向海量企业文档。
 - 暂未加入账号、权限、多人实时协作和云端文件存储。
 
 ## 后续路线
@@ -198,4 +212,5 @@ npm.cmd run start
 - 为所有步骤补齐独立 Agent 与统一提示词版本管理。
 - 增加账号体系、项目权限和协作评论。
 - 增加真实 `.docx`、PDF 和原型图片导出。
+- 将应用层向量检索迁移至 `pgvector`，增加混合检索与重排序。
 - 增加 Agent 评测集、生成质量评分和自动化测试。

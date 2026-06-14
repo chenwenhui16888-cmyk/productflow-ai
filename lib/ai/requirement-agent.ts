@@ -25,6 +25,7 @@ type RequirementInput = {
     questionType: string;
     userAnswer: string | null;
   }>;
+  knowledgeContext?: string;
 };
 
 export async function generateRequirementsWithLocalAi(input: RequirementInput) {
@@ -46,6 +47,7 @@ function buildPrompt(input: RequirementInput) {
     "2. P0 \u53ea\u653e MVP \u4e3b\u94fe\u8def\uff0cP1/P2 \u653e\u8f85\u52a9\u6216\u53ef\u5ef6\u540e\u529f\u80fd\u3002",
     "3. \u81f3\u5c11 3 \u6761 isMvp=true\uff0c\u81f3\u5c11 1 \u6761 outOfScope=true\u3002",
     "4. \u8f93\u51fa JSON\uff1a{\"items\":[{\"userScenario\":\"...\",\"userProblem\":\"...\",\"userValue\":\"...\",\"featureModule\":\"...\",\"subFeature\":\"...\",\"priority\":\"P0\",\"isMvp\":true,\"mvpReason\":\"...\",\"outOfScope\":false,\"assumptions\":[\"...\"],\"risks\":[\"...\"]}]}",
+    "5. 如果提供了项目知识库，请优先遵守其中的业务规则；资料未覆盖的内容必须作为假设或风险，不得伪造事实。",
     "",
     JSON.stringify({
       projectName: input.projectName,
@@ -58,7 +60,10 @@ function buildPrompt(input: RequirementInput) {
         type: item.questionType,
         answer: item.userAnswer || "\u672a\u56de\u7b54"
       }))
-    }, null, 2)
+    }, null, 2),
+    "",
+    "项目知识库检索结果：",
+    input.knowledgeContext || "未提供知识库资料。"
   ].join("\n");
 }
 

@@ -30,9 +30,42 @@ model Project {
   deliveryItems             DeliveryItem[]
   reviewReports             ReviewReport[]
   generationLogs            GenerationLog[]
+  knowledgeDocuments        KnowledgeDocument[]
 
   @@index([status])
   @@index([updatedAt])
+}
+
+model KnowledgeDocument {
+  id        String @id @default(cuid())
+  projectId String
+  fileName  String
+  content   String @db.Text
+  status    String @default("ready")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  chunks  KnowledgeChunk[]
+
+  @@index([projectId])
+}
+
+model KnowledgeChunk {
+  id         String @id @default(cuid())
+  documentId String
+  projectId  String
+  chunkIndex Int
+  content    String @db.Text
+  embedding  Json
+
+  createdAt DateTime @default(now())
+
+  document KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([documentId])
 }
 
 model StepStatus {
