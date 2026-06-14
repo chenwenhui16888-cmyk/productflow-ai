@@ -1,0 +1,424 @@
+{
+  "generatedAt": "2026-06-14T16:07:20.850Z",
+  "rag": {
+    "documentCount": 10,
+    "chunkCount": 10,
+    "queryCount": 20,
+    "topK": 4,
+    "embeddingModel": "local-hash-embedding",
+    "embeddingMode": "fallback",
+    "top1Accuracy": 0.2,
+    "top4Recall": 0.55,
+    "averageQueryMs": 3.7,
+    "p50QueryMs": 3.5,
+    "p95QueryMs": 5.4,
+    "averageIngestionMs": 33.6,
+    "details": [
+      {
+        "query": "会员买了五天但没用权益，能不能退款？",
+        "expected": "会员退款规则.md",
+        "top1": "内容导出规则.md",
+        "top4": [
+          "内容导出规则.md",
+          "AI生成内容规范.md",
+          "消息通知规则.md",
+          "新用户引导规范.md"
+        ],
+        "top1Score": 0.2021,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 5.4
+      },
+      {
+        "query": "退款审核需要多长时间？",
+        "expected": "会员退款规则.md",
+        "top1": "内容导出规则.md",
+        "top4": [
+          "内容导出规则.md",
+          "文件上传规范.md",
+          "账号权限规则.md",
+          "AI生成内容规范.md"
+        ],
+        "top1Score": 0.209,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 5.4
+      },
+      {
+        "query": "日志里是否可以保存用户手机号和 token？",
+        "expected": "隐私与数据规范.md",
+        "top1": "响应性能目标.md",
+        "top4": [
+          "响应性能目标.md",
+          "内容导出规则.md",
+          "消息通知规则.md",
+          "隐私与数据规范.md"
+        ],
+        "top1Score": 0.1988,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 4.6
+      },
+      {
+        "query": "用户删除上传资料时系统应该怎么处理？",
+        "expected": "隐私与数据规范.md",
+        "top1": "隐私与数据规范.md",
+        "top4": [
+          "隐私与数据规范.md",
+          "新用户引导规范.md",
+          "账号权限规则.md",
+          "PRD评审标准.md"
+        ],
+        "top1Score": 0.258,
+        "top1Hit": true,
+        "top4Hit": true,
+        "elapsedMs": 4.1
+      },
+      {
+        "query": "新用户第一次进入产品最多安排几个步骤？",
+        "expected": "新用户引导规范.md",
+        "top1": "会员退款规则.md",
+        "top4": [
+          "会员退款规则.md",
+          "响应性能目标.md",
+          "文件上传规范.md",
+          "内容导出规则.md"
+        ],
+        "top1Score": 0.2178,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3.5
+      },
+      {
+        "query": "AI 信息不足时可以自己编造调研结论吗？",
+        "expected": "AI生成内容规范.md",
+        "top1": "AI生成内容规范.md",
+        "top4": [
+          "AI生成内容规范.md",
+          "响应性能目标.md",
+          "新用户引导规范.md",
+          "文件上传规范.md"
+        ],
+        "top1Score": 0.2394,
+        "top1Hit": true,
+        "top4Hit": true,
+        "elapsedMs": 3.7
+      },
+      {
+        "query": "AI 生成的需求能否直接成为已确认状态？",
+        "expected": "AI生成内容规范.md",
+        "top1": "新用户引导规范.md",
+        "top4": [
+          "新用户引导规范.md",
+          "AI生成内容规范.md",
+          "内容导出规则.md",
+          "会员退款规则.md"
+        ],
+        "top1Score": 0.1875,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 3.3
+      },
+      {
+        "query": "MVP 是否需要管理员和编辑者权限？",
+        "expected": "账号权限规则.md",
+        "top1": "账号权限规则.md",
+        "top4": [
+          "账号权限规则.md",
+          "内容导出规则.md",
+          "PRD评审标准.md",
+          "响应性能目标.md"
+        ],
+        "top1Score": 0.3516,
+        "top1Hit": true,
+        "top4Hit": true,
+        "elapsedMs": 3.9
+      },
+      {
+        "query": "谁可以删除企业项目？",
+        "expected": "账号权限规则.md",
+        "top1": "账号权限规则.md",
+        "top4": [
+          "账号权限规则.md",
+          "隐私与数据规范.md",
+          "AI生成内容规范.md",
+          "内容导出规则.md"
+        ],
+        "top1Score": 0.1989,
+        "top1Hit": true,
+        "top4Hit": true,
+        "elapsedMs": 3.1
+      },
+      {
+        "query": "首版通知需要发送邮件吗？",
+        "expected": "消息通知规则.md",
+        "top1": "文件上传规范.md",
+        "top4": [
+          "文件上传规范.md",
+          "新用户引导规范.md",
+          "响应性能目标.md",
+          "AI生成内容规范.md"
+        ],
+        "top1Score": 0.165,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3.7
+      },
+      {
+        "query": "重复事件应该如何避免频繁提醒？",
+        "expected": "消息通知规则.md",
+        "top1": "PRD评审标准.md",
+        "top4": [
+          "PRD评审标准.md",
+          "账号权限规则.md",
+          "AI生成内容规范.md",
+          "新用户引导规范.md"
+        ],
+        "top1Score": 0.1825,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3.8
+      },
+      {
+        "query": "知识库首版支持哪些文件格式？",
+        "expected": "文件上传规范.md",
+        "top1": "AI生成内容规范.md",
+        "top4": [
+          "AI生成内容规范.md",
+          "会员退款规则.md",
+          "新用户引导规范.md",
+          "账号权限规则.md"
+        ],
+        "top1Score": 0.1909,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 4.6
+      },
+      {
+        "query": "单个知识文档的字符上限是多少？",
+        "expected": "文件上传规范.md",
+        "top1": "响应性能目标.md",
+        "top4": [
+          "响应性能目标.md",
+          "AI生成内容规范.md",
+          "文件上传规范.md",
+          "消息通知规则.md"
+        ],
+        "top1Score": 0.1925,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 3.1
+      },
+      {
+        "query": "PRD 评审需要包含哪些章节？",
+        "expected": "PRD评审标准.md",
+        "top1": "隐私与数据规范.md",
+        "top4": [
+          "隐私与数据规范.md",
+          "文件上传规范.md",
+          "内容导出规则.md",
+          "AI生成内容规范.md"
+        ],
+        "top1Score": 0.2172,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3
+      },
+      {
+        "query": "P0 需求需要和什么产物建立映射？",
+        "expected": "PRD评审标准.md",
+        "top1": "响应性能目标.md",
+        "top4": [
+          "响应性能目标.md",
+          "隐私与数据规范.md",
+          "PRD评审标准.md",
+          "账号权限规则.md"
+        ],
+        "top1Score": 0.1556,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 2.5
+      },
+      {
+        "query": "普通接口的 P95 性能目标是什么？",
+        "expected": "响应性能目标.md",
+        "top1": "AI生成内容规范.md",
+        "top4": [
+          "AI生成内容规范.md",
+          "响应性能目标.md",
+          "文件上传规范.md",
+          "会员退款规则.md"
+        ],
+        "top1Score": 0.2646,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 3.2
+      },
+      {
+        "query": "AI 生成超过一分钟应该如何反馈？",
+        "expected": "响应性能目标.md",
+        "top1": "AI生成内容规范.md",
+        "top4": [
+          "AI生成内容规范.md",
+          "新用户引导规范.md",
+          "文件上传规范.md",
+          "响应性能目标.md"
+        ],
+        "top1Score": 0.3961,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 2.7
+      },
+      {
+        "query": "导出文件名应该包含哪些信息？",
+        "expected": "内容导出规则.md",
+        "top1": "文件上传规范.md",
+        "top4": [
+          "文件上传规范.md",
+          "内容导出规则.md",
+          "新用户引导规范.md",
+          "账号权限规则.md"
+        ],
+        "top1Score": 0.2309,
+        "top1Hit": false,
+        "top4Hit": true,
+        "elapsedMs": 3.5
+      },
+      {
+        "query": "导出文档里可以包含模型密钥吗？",
+        "expected": "内容导出规则.md",
+        "top1": "文件上传规范.md",
+        "top4": [
+          "文件上传规范.md",
+          "AI生成内容规范.md",
+          "响应性能目标.md",
+          "新用户引导规范.md"
+        ],
+        "top1Score": 0.1897,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3.2
+      },
+      {
+        "query": "删除知识文档后向量是否保留？",
+        "expected": "文件上传规范.md",
+        "top1": "AI生成内容规范.md",
+        "top4": [
+          "AI生成内容规范.md",
+          "隐私与数据规范.md",
+          "消息通知规则.md",
+          "响应性能目标.md"
+        ],
+        "top1Score": 0.2807,
+        "top1Hit": false,
+        "top4Hit": false,
+        "elapsedMs": 3.2
+      }
+    ]
+  },
+  "generation": {
+    "caseCount": 10,
+    "model": "qwen2.5:3b",
+    "requestSuccessRate": 1,
+    "strictJsonParseRate": 0.9,
+    "recoveredJsonParseRate": 0.9,
+    "schemaValidationRate": 0.6,
+    "finalSuccessRateWithFallback": 1,
+    "fallbackRate": 0.4,
+    "averageMs": 30968.5,
+    "p50Ms": 31122.7,
+    "p95Ms": 43857.2,
+    "details": [
+      {
+        "name": "校园二手交易",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 43857.2
+      },
+      {
+        "name": "AI面试复盘",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 38549.6
+      },
+      {
+        "name": "社区报修平台",
+        "requestSucceeded": true,
+        "strictJsonParsed": false,
+        "recoveredJsonParsed": false,
+        "schemaValid": false,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 31292.2
+      },
+      {
+        "name": "健身计划助手",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 33805.2
+      },
+      {
+        "name": "宠物健康记录",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": false,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 23366.8
+      },
+      {
+        "name": "会议行动项",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": false,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 34425
+      },
+      {
+        "name": "旅行预算规划",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 31122.7
+      },
+      {
+        "name": "课程反馈系统",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": false,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 20578.2
+      },
+      {
+        "name": "小店库存预警",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 28067.2
+      },
+      {
+        "name": "读书笔记整理",
+        "requestSucceeded": true,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
+        "schemaValid": true,
+        "finalSucceededWithFallback": true,
+        "elapsedMs": 24620.4
+      }
+    ]
+  }
+}

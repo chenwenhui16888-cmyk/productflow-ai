@@ -144,6 +144,31 @@ npm.cmd run dev
 | `npm.cmd run prisma:migrate` | 创建并执行开发迁移 |
 | `npm.cmd run prisma:deploy` | 执行生产数据库迁移 |
 | `npm.cmd run prisma:studio` | 打开 Prisma 数据管理界面 |
+| `npm.cmd run eval` | 运行结构化生成与 RAG 自动化评测 |
+
+## 自动化评测
+
+项目包含可重复运行的评测包：
+
+- 10 组不同领域的产品想法，用于测试结构化需求生成。
+- 10 份模拟业务知识文档。
+- 20 条带正确来源标注的 RAG 查询。
+- 自动统计 JSON 解析率、Schema 校验率、降级率、P50/P95 响应时间和 Top-K 检索效果。
+- 运行结束自动清理临时项目，不污染正式数据。
+
+2026 年 6 月 15 日在本地 `qwen2.5:3b` 上的测试结果：
+
+| 指标 | 结果 |
+| --- | ---: |
+| 模型请求成功率 | 100% |
+| JSON 首次严格解析成功率 | 90% |
+| Schema 校验通过率 | 60% |
+| 加入规则降级后的最终成功率 | 100% |
+| 降级触发率 | 40% |
+| 平均生成响应时间 | 30.97 秒 |
+| P50 / P95 生成时间 | 31.12 / 43.86 秒 |
+
+当前机器尚未完成 `nomic-embed-text` 下载，因此 RAG 结果属于 `local-hash-embedding` 基线：Top-1 来源命中率 20%，Top-4 来源召回率 55%。该基线用于验证评测链路，不作为正式语义检索效果结论。完整报告见 [`evaluation/results/latest.md`](evaluation/results/latest.md)。
 
 ## 目录结构
 
