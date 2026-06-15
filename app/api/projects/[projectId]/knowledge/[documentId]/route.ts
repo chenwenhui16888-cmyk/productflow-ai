@@ -8,6 +8,8 @@ export async function DELETE(
   const result = await prisma.knowledgeDocument.deleteMany({
     where: { id: params.documentId, projectId: params.projectId }
   });
-  if (!result.count) return NextResponse.json({ error: "文档不存在。" }, { status: 404 });
+  if (!result.count) {
+    return NextResponse.json({ error: "\u6587\u6863\u4e0d\u5b58\u5728\u3002" }, { status: 404 });
+  }
   return NextResponse.json({ ok: true });
 }

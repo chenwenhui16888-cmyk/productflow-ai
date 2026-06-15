@@ -102,18 +102,28 @@ export function buildProjectMarkdown(project: Workspace) {
 
 export function buildExportFileName(projectName: string) {
   const safeName = projectName.replace(/[\\/:*?"<>|]/g, "-").trim() || "ProductFlow-AI";
-  return `${safeName}-ProductFlow-AI.doc`;
+  return `${safeName}-PRD.doc`;
+}
+
+export function buildPrdWordHtml(project: Workspace) {
+  const markdown = project.prdDocument?.contentMarkdown;
+  if (!markdown) return null;
+  return buildWordHtml(markdown, `${project.name} PRD`);
 }
 
 export function buildProjectWordHtml(project: Workspace) {
   const markdown = buildProjectMarkdown(project);
+  return buildWordHtml(markdown, `${project.name} - ProductFlow AI`);
+}
+
+function buildWordHtml(markdown: string, title: string) {
   const body = markdownToWordHtml(markdown);
 
   return `<!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${escapeHtml(project.name)} - ProductFlow AI</title>
+  <title>${escapeHtml(title)}</title>
   <style>
     body {
       font-family: "Microsoft YaHei", Arial, sans-serif;

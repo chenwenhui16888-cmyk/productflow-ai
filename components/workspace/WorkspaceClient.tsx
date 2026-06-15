@@ -140,7 +140,7 @@ export function WorkspaceClient({ project }: WorkspaceClientProps) {
             {"\u6700\u540e\u66f4\u65b0\uff1a"}{project.updatedAt.toLocaleString("zh-CN")}
           </span>
           <a className="button" href={`/api/projects/${project.id}/export`}>
-            {"\u5bfc\u51fa Word"}
+            {"\u5bfc\u51fa PRD Word"}
           </a>
         </div>
       </header>
