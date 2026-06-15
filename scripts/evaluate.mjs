@@ -136,13 +136,29 @@ async function evaluateGeneration() {
       const raw = await ollamaGenerate(prompt);
       const strictParsed = tryJson(raw);
       const recoveredParsed = strictParsed || recoverJson(raw);
-      const valid = validateGeneration(recoveredParsed);
+      const firstValid = validateGeneration(recoveredParsed);
+      let repaired = null;
+      let repairAttempted = false;
+      if (!firstValid) {
+        repairAttempted = true;
+        const repairedRaw = await ollamaGenerate([
+          prompt,
+          "",
+          "上一次输出未通过 Schema 校验，请修复后只输出完整 JSON。",
+          raw
+        ].join("\n"));
+        repaired = recoverJson(repairedRaw);
+      }
+      const finalValid = firstValid || validateGeneration(repaired);
       details.push({
         name: item.name,
         requestSucceeded: true,
         strictJsonParsed: Boolean(strictParsed),
         recoveredJsonParsed: Boolean(recoveredParsed),
-        schemaValid: valid,
+        schemaValid: firstValid,
+        repairAttempted,
+        repairSucceeded: !firstValid && finalValid,
+        finalSchemaValid: finalValid,
         finalSucceededWithFallback: true,
         elapsedMs: round(performance.now() - start, 1)
       });
@@ -153,6 +169,9 @@ async function evaluateGeneration() {
         strictJsonParsed: false,
         recoveredJsonParsed: false,
         schemaValid: false,
+        repairAttempted: false,
+        repairSucceeded: false,
+        finalSchemaValid: false,
         finalSucceededWithFallback: true,
         elapsedMs: round(performance.now() - start, 1),
         error: String(error)
@@ -166,6 +185,11 @@ async function evaluateGeneration() {
     strictJsonParseRate: ratio(details.filter((item) => item.strictJsonParsed).length, details.length),
     recoveredJsonParseRate: ratio(details.filter((item) => item.recoveredJsonParsed).length, details.length),
     schemaValidationRate: ratio(details.filter((item) => item.schemaValid).length, details.length),
+    repairedSchemaValidationRate: ratio(details.filter((item) => item.finalSchemaValid).length, details.length),
+    repairSuccessRate: ratio(
+      details.filter((item) => item.repairSucceeded).length,
+      details.filter((item) => item.repairAttempted).length
+    ),
     finalSuccessRateWithFallback: ratio(details.filter((item) => item.finalSucceededWithFallback).length, details.length),
     fallbackRate: ratio(details.filter((item) => !item.schemaValid).length, details.length),
     averageMs: average(details.map((item) => item.elapsedMs)),
@@ -298,6 +322,8 @@ function buildReport(rag, generation) {
 | JSON 首次严格解析成功率 | ${percent(generation.strictJsonParseRate)} |
 | 清洗恢复后解析成功率 | ${percent(generation.recoveredJsonParseRate)} |
 | Schema 校验通过率 | ${percent(generation.schemaValidationRate)} |
+| 自动修复后 Schema 通过率 | ${percent(generation.repairedSchemaValidationRate)} |
+| 修复尝试成功率 | ${percent(generation.repairSuccessRate)} |
 | 加入降级后的最终成功率 | ${percent(generation.finalSuccessRateWithFallback)} |
 | 降级触发率 | ${percent(generation.fallbackRate)} |
 | 平均响应时间 | ${generation.averageMs} ms |

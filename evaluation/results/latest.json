@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-14T16:07:20.850Z",
+  "generatedAt": "2026-06-15T11:26:28.049Z",
   "rag": {
     "documentCount": 10,
     "chunkCount": 10,
@@ -9,10 +9,10 @@
     "embeddingMode": "fallback",
     "top1Accuracy": 0.2,
     "top4Recall": 0.55,
-    "averageQueryMs": 3.7,
+    "averageQueryMs": 3.4,
     "p50QueryMs": 3.5,
-    "p95QueryMs": 5.4,
-    "averageIngestionMs": 33.6,
+    "p95QueryMs": 4.8,
+    "averageIngestionMs": 19.8,
     "details": [
       {
         "query": "会员买了五天但没用权益，能不能退款？",
@@ -27,7 +27,7 @@
         "top1Score": 0.2021,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 5.4
+        "elapsedMs": 4.8
       },
       {
         "query": "退款审核需要多长时间？",
@@ -57,7 +57,7 @@
         "top1Score": 0.1988,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 4.6
+        "elapsedMs": 4.4
       },
       {
         "query": "用户删除上传资料时系统应该怎么处理？",
@@ -72,7 +72,7 @@
         "top1Score": 0.258,
         "top1Hit": true,
         "top4Hit": true,
-        "elapsedMs": 4.1
+        "elapsedMs": 4
       },
       {
         "query": "新用户第一次进入产品最多安排几个步骤？",
@@ -102,7 +102,7 @@
         "top1Score": 0.2394,
         "top1Hit": true,
         "top4Hit": true,
-        "elapsedMs": 3.7
+        "elapsedMs": 4
       },
       {
         "query": "AI 生成的需求能否直接成为已确认状态？",
@@ -117,7 +117,7 @@
         "top1Score": 0.1875,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 3.3
+        "elapsedMs": 4.3
       },
       {
         "query": "MVP 是否需要管理员和编辑者权限？",
@@ -147,7 +147,7 @@
         "top1Score": 0.1989,
         "top1Hit": true,
         "top4Hit": true,
-        "elapsedMs": 3.1
+        "elapsedMs": 3.8
       },
       {
         "query": "首版通知需要发送邮件吗？",
@@ -162,7 +162,7 @@
         "top1Score": 0.165,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 3.7
+        "elapsedMs": 3.8
       },
       {
         "query": "重复事件应该如何避免频繁提醒？",
@@ -177,7 +177,7 @@
         "top1Score": 0.1825,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 3.8
+        "elapsedMs": 3.1
       },
       {
         "query": "知识库首版支持哪些文件格式？",
@@ -192,7 +192,7 @@
         "top1Score": 0.1909,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 4.6
+        "elapsedMs": 3.5
       },
       {
         "query": "单个知识文档的字符上限是多少？",
@@ -207,7 +207,7 @@
         "top1Score": 0.1925,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 3.1
+        "elapsedMs": 2.7
       },
       {
         "query": "PRD 评审需要包含哪些章节？",
@@ -222,7 +222,7 @@
         "top1Score": 0.2172,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 3
+        "elapsedMs": 2.8
       },
       {
         "query": "P0 需求需要和什么产物建立映射？",
@@ -252,7 +252,7 @@
         "top1Score": 0.2646,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 3.2
+        "elapsedMs": 2.3
       },
       {
         "query": "AI 生成超过一分钟应该如何反馈？",
@@ -267,7 +267,7 @@
         "top1Score": 0.3961,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 2.7
+        "elapsedMs": 2.3
       },
       {
         "query": "导出文件名应该包含哪些信息？",
@@ -282,7 +282,7 @@
         "top1Score": 0.2309,
         "top1Hit": false,
         "top4Hit": true,
-        "elapsedMs": 3.5
+        "elapsedMs": 3.3
       },
       {
         "query": "导出文档里可以包含模型密钥吗？",
@@ -297,7 +297,7 @@
         "top1Score": 0.1897,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 3.2
+        "elapsedMs": 2.2
       },
       {
         "query": "删除知识文档后向量是否保留？",
@@ -312,7 +312,7 @@
         "top1Score": 0.2807,
         "top1Hit": false,
         "top4Hit": false,
-        "elapsedMs": 3.2
+        "elapsedMs": 2.1
       }
     ]
   },
@@ -320,14 +320,16 @@
     "caseCount": 10,
     "model": "qwen2.5:3b",
     "requestSuccessRate": 1,
-    "strictJsonParseRate": 0.9,
-    "recoveredJsonParseRate": 0.9,
-    "schemaValidationRate": 0.6,
+    "strictJsonParseRate": 0.8,
+    "recoveredJsonParseRate": 0.8,
+    "schemaValidationRate": 0.5,
+    "repairedSchemaValidationRate": 0.7,
+    "repairSuccessRate": 0.4,
     "finalSuccessRateWithFallback": 1,
-    "fallbackRate": 0.4,
-    "averageMs": 30968.5,
-    "p50Ms": 31122.7,
-    "p95Ms": 43857.2,
+    "fallbackRate": 0.5,
+    "averageMs": 44741.8,
+    "p50Ms": 34116.9,
+    "p95Ms": 81929.8,
     "details": [
       {
         "name": "校园二手交易",
@@ -335,8 +337,11 @@
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
         "schemaValid": true,
+        "repairAttempted": false,
+        "repairSucceeded": false,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 43857.2
+        "elapsedMs": 39805.1
       },
       {
         "name": "AI面试复盘",
@@ -344,44 +349,59 @@
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
         "schemaValid": true,
+        "repairAttempted": false,
+        "repairSucceeded": false,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 38549.6
+        "elapsedMs": 33299
       },
       {
         "name": "社区报修平台",
         "requestSucceeded": true,
-        "strictJsonParsed": false,
-        "recoveredJsonParsed": false,
+        "strictJsonParsed": true,
+        "recoveredJsonParsed": true,
         "schemaValid": false,
+        "repairAttempted": true,
+        "repairSucceeded": true,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 31292.2
+        "elapsedMs": 34116.9
       },
       {
         "name": "健身计划助手",
         "requestSucceeded": true,
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
-        "schemaValid": true,
+        "schemaValid": false,
+        "repairAttempted": true,
+        "repairSucceeded": false,
+        "finalSchemaValid": false,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 33805.2
+        "elapsedMs": 57378.3
       },
       {
         "name": "宠物健康记录",
         "requestSucceeded": true,
-        "strictJsonParsed": true,
-        "recoveredJsonParsed": true,
+        "strictJsonParsed": false,
+        "recoveredJsonParsed": false,
         "schemaValid": false,
+        "repairAttempted": true,
+        "repairSucceeded": false,
+        "finalSchemaValid": false,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 23366.8
+        "elapsedMs": 55210.6
       },
       {
         "name": "会议行动项",
         "requestSucceeded": true,
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
-        "schemaValid": false,
+        "schemaValid": true,
+        "repairAttempted": false,
+        "repairSucceeded": false,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 34425
+        "elapsedMs": 31867
       },
       {
         "name": "旅行预算规划",
@@ -389,35 +409,47 @@
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
         "schemaValid": true,
+        "repairAttempted": false,
+        "repairSucceeded": false,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 31122.7
+        "elapsedMs": 24261
       },
       {
         "name": "课程反馈系统",
         "requestSucceeded": true,
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
-        "schemaValid": false,
+        "schemaValid": true,
+        "repairAttempted": false,
+        "repairSucceeded": false,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 20578.2
+        "elapsedMs": 18316.3
       },
       {
         "name": "小店库存预警",
         "requestSucceeded": true,
-        "strictJsonParsed": true,
-        "recoveredJsonParsed": true,
-        "schemaValid": true,
+        "strictJsonParsed": false,
+        "recoveredJsonParsed": false,
+        "schemaValid": false,
+        "repairAttempted": true,
+        "repairSucceeded": true,
+        "finalSchemaValid": true,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 28067.2
+        "elapsedMs": 71233.6
       },
       {
         "name": "读书笔记整理",
         "requestSucceeded": true,
         "strictJsonParsed": true,
         "recoveredJsonParsed": true,
-        "schemaValid": true,
+        "schemaValid": false,
+        "repairAttempted": true,
+        "repairSucceeded": false,
+        "finalSchemaValid": false,
         "finalSucceededWithFallback": true,
-        "elapsedMs": 24620.4
+        "elapsedMs": 81929.8
       }
     ]
   }

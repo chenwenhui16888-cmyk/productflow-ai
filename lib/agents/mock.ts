@@ -178,7 +178,7 @@ export async function generateRequirementBreakdown(projectId: string) {
       risks: ["\u8fc7\u65e9\u52a0\u5165\u4f1a\u62d6\u6162 MVP \u4ea4\u4ed8\u3002"]
     }
   ];
-  const aiItems = await generateRequirementsWithLocalAi({
+  const requirementResult = await generateRequirementsWithLocalAi({
     projectName: project.name,
     ideaText: project.ideaText,
     productType: project.productType,
@@ -187,6 +187,7 @@ export async function generateRequirementBreakdown(projectId: string) {
     clarificationQuestions: project.clarificationQuestions,
     knowledgeContext: formatRagContext(ragSources)
   });
+  const aiItems = requirementResult.data;
   const items = aiItems ?? mockItems;
   const generationMode = aiItems ? "ollama" : "mock";
   const modelName = aiItems ? "qwen2.5:3b" : "local-mock";
@@ -212,7 +213,18 @@ export async function generateRequirementBreakdown(projectId: string) {
     "requirement_breakdown",
     "requirement_breakdown_items",
     { count: items.length },
-    { mode: generationMode, modelName }
+    {
+      mode: generationMode,
+      modelName,
+      durationMs: requirementResult.metrics.durationMs,
+      attempts: requirementResult.metrics.attempts,
+      firstParseSucceeded: requirementResult.metrics.firstParseSucceeded,
+      firstValidationSucceeded: requirementResult.metrics.firstValidationSucceeded,
+      repairSucceeded: requirementResult.metrics.repairSucceeded,
+      finalValidationSucceeded: requirementResult.metrics.finalValidationSucceeded,
+      errorType: requirementResult.metrics.errorType,
+      retrievedChunkCount: ragSources.length
+    }
   );
 
   return prisma.requirementBreakdownItem.findMany({
@@ -232,11 +244,12 @@ export async function generateUserStories(projectId: string) {
   const p0Items = project.requirementBreakdownItems.filter((item) => item.priority === "P0");
   const sourceItems = p0Items.length ? p0Items : project.requirementBreakdownItems.slice(0, 3);
 
-  const aiStories = await generateUserStoriesWithLocalAi({
+  const storyResult = await generateUserStoriesWithLocalAi({
     projectName: project.name,
     ideaText: project.ideaText,
     requirementBreakdownItems: project.requirementBreakdownItems
   });
+  const aiStories = storyResult.data;
   const generationMode = aiStories ? "ollama" : "mock";
   const modelName = aiStories ? "qwen2.5:3b" : "local-mock";
 
@@ -320,7 +333,17 @@ export async function generateUserStories(projectId: string) {
     "user_story",
     "user_stories",
     { count: stories.length },
-    { mode: generationMode, modelName }
+    {
+      mode: generationMode,
+      modelName,
+      durationMs: storyResult.metrics.durationMs,
+      attempts: storyResult.metrics.attempts,
+      firstParseSucceeded: storyResult.metrics.firstParseSucceeded,
+      firstValidationSucceeded: storyResult.metrics.firstValidationSucceeded,
+      repairSucceeded: storyResult.metrics.repairSucceeded,
+      finalValidationSucceeded: storyResult.metrics.finalValidationSucceeded,
+      errorType: storyResult.metrics.errorType
+    }
   );
 
   return prisma.userStory.findMany({
@@ -950,7 +973,18 @@ async function writeGenerationLog(
   stepKey: string,
   artifactType: string,
   outputSnapshot: object,
-  options: { mode?: string; modelName?: string } = {}
+  options: {
+    mode?: string;
+    modelName?: string;
+    durationMs?: number;
+    attempts?: number;
+    firstParseSucceeded?: boolean;
+    firstValidationSucceeded?: boolean;
+    repairSucceeded?: boolean;
+    finalValidationSucceeded?: boolean;
+    errorType?: string | null;
+    retrievedChunkCount?: number;
+  } = {}
 ) {
   await prisma.generationLog.create({
     data: {
@@ -958,7 +992,19 @@ async function writeGenerationLog(
       stepKey,
       artifactType,
       mode: options.mode ?? "mock",
-      outputSnapshot,
+      outputSnapshot: {
+        ...outputSnapshot,
+        metrics: {
+          durationMs: options.durationMs ?? 0,
+          attempts: options.attempts ?? 0,
+          firstParseSucceeded: options.firstParseSucceeded ?? false,
+          firstValidationSucceeded: options.firstValidationSucceeded ?? false,
+          repairSucceeded: options.repairSucceeded ?? false,
+          finalValidationSucceeded: options.finalValidationSucceeded ?? options.mode !== "mock",
+          errorType: options.errorType ?? null,
+          retrievedChunkCount: options.retrievedChunkCount ?? 0
+        }
+      },
       modelName: options.modelName ?? "local-mock",
       status: "completed",
       completedAt: new Date()

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { embedWithOllama } from "@/lib/ai/ollama";
+import { cosineSimilarity, splitText } from "@/lib/shared/rag-utils.mjs";
 
 export type RagSource = {
   chunkId: string;
@@ -9,21 +10,7 @@ export type RagSource = {
 };
 
 export function splitDocument(content: string, maxLength = 700, overlap = 100) {
-  const paragraphs = content.split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
-  const chunks: string[] = [];
-  let current = "";
-
-  for (const paragraph of paragraphs) {
-    if ((current + "\n\n" + paragraph).length <= maxLength) {
-      current = current ? `${current}\n\n${paragraph}` : paragraph;
-      continue;
-    }
-    if (current) chunks.push(current);
-    const carry = current.slice(-overlap);
-    current = `${carry}\n${paragraph}`.trim().slice(0, maxLength);
-  }
-  if (current) chunks.push(current);
-  return chunks.length ? chunks : [content.slice(0, maxLength)];
+  return splitText(content, maxLength, overlap);
 }
 
 export async function addKnowledgeDocument(projectId: string, fileName: string, content: string) {
@@ -80,17 +67,4 @@ export function formatRagContext(sources: RagSource[]) {
 
 function asNumberArray(value: unknown) {
   return Array.isArray(value) ? value.map(Number).filter(Number.isFinite) : [];
-}
-
-function cosineSimilarity(left: number[], right: number[]) {
-  if (!left.length || left.length !== right.length) return 0;
-  let dot = 0;
-  let leftNorm = 0;
-  let rightNorm = 0;
-  for (let index = 0; index < left.length; index += 1) {
-    dot += left[index] * right[index];
-    leftNorm += left[index] ** 2;
-    rightNorm += right[index] ** 2;
-  }
-  return dot / ((Math.sqrt(leftNorm) * Math.sqrt(rightNorm)) || 1);
 }
